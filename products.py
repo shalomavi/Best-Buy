@@ -13,7 +13,7 @@ class Product:
             raise Exception("Empty name value Error, Please enter a name")
         if price < 0:
             raise Exception("Negative price Error, please set price again")
-        if quantity < 0:
+        if quantity <= 0:
             raise Exception("Negative quantity Error, please set price again")
         self.name = name
         self.price = price
@@ -31,7 +31,7 @@ class Product:
         if type(quantity) is not int or quantity < 0:
             raise QuantityException("Invalid input Error, insert quantity again")
         self.quantity = quantity
-        if self.quantity < 0:
+        if self.quantity <= 0:
             self.active = False
 
     def is_active(self) -> bool:

@@ -7,7 +7,6 @@ class Store:
     def __init__(self, list_of_products):
         self.products = list_of_products
 
-
     def add_product(self, product):
         """Adds product to store"""
         self.products.append(product)
@@ -45,9 +44,3 @@ class Store:
             product_price = product_class.buy(product_quantity)
             total_order_price += product_price
         return total_order_price
-
-
-
-
-
-
