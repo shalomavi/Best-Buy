@@ -24,7 +24,7 @@ def apply_choice(user_input, store_name):
         while product_index != "".strip():
             try:
                 product_index = input("Which product # do you want? :")
-                if int(product_index) > len(store_name.get_all_products()) - 1:
+                if int(product_index) > len(store_name.get_all_products()):
                     print("there isn't a product responding to this choice")
                     continue
                 try:
@@ -35,7 +35,7 @@ def apply_choice(user_input, store_name):
                     order_price_amount = store_name.order([(store_name.products[int(product_index) - 1], quantity)])
                     print(f"Total purchase amount: {order_price_amount}")
                 except products.QuantityException:
-                    print("there are not enough products to buy")
+                    print("there are not enough products to buy, or product is limited")
             except ValueError:
                 print("please enter an integer")
 
@@ -60,7 +60,9 @@ def main():
     # setup initial stock of inventory
     product_list = [products.Product("MacBook Air M2", price=1450, quantity=100),
                     products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
-                    products.Product("Google Pixel 7", price=500, quantity=250)
+                    products.Product("Google Pixel 7", price=500, quantity=250),
+                    products.NonStockedProduct("Windows License", price=125),
+                    products.LimitedProduct("Shipping", price=10, quantity=250, maximum=1)
                     ]
     best_buy = store.Store(product_list)
     start(best_buy)

@@ -1,6 +1,6 @@
-
 class QuantityException(Exception):
-    print("Quantity Error")
+    if __name__ == "__main__":
+        print("Quantity Error")
 
 
 class Product:
@@ -13,8 +13,8 @@ class Product:
             raise Exception("Empty name value Error, Please enter a name")
         if price < 0:
             raise Exception("Negative price Error, please set price again")
-        if quantity <= 0:
-            raise Exception("Negative quantity Error, please set price again")
+        if quantity < 0:
+            raise Exception("Negative quantity Error, please set quantity again")
         self.name = name
         self.price = price
         self.quantity = quantity
@@ -59,9 +59,47 @@ class Product:
             raise QuantityException("Invalid input Error, insert quantity again")
         if self.quantity - quantity < 0:
             raise QuantityException("Quantity Error, there are not enough products to buy")
-        self.quantity -= quantity
+        self.set_quantity(self.quantity - quantity)
         if self.quantity == 0:
             self.deactivate()
         return float(self.price * quantity)
 
 
+class NonStockedProduct(Product):
+    def __init__(self, name, price, quantity=0):
+        super().__init__(name, price, quantity)
+
+    def show(self) -> str:
+        """Returns a string that represents the product"""
+        return f'{self.name}, Price: {self.price}, Quantity: Unlimited'
+
+    def buy(self, quantity: int) -> float:
+        """Buys a given quantity of the product, quantity is unlimited.
+                Returns the total price (float) of the purchase."""
+        if quantity == "" or not type(quantity) is int or quantity < 0:
+            raise QuantityException("Invalid input Error, insert quantity again")
+        self.set_quantity(0)
+        return float(self.price * quantity)
+
+
+class LimitedProduct(Product):
+    def __init__(self, name, price, quantity, maximum):
+        super().__init__(name, price, quantity)
+        self.maximum = maximum
+
+    def show(self) -> str:
+        """Returns a string that represents the product"""
+        return f'{self.name}, Price: {self.price}, Limited to {self.maximum} per order!'
+
+    def buy(self, quantity: int) -> float:
+        """Buys a given quantity of the product.
+                Returns the total price (float) of the purchase."""
+        if quantity == "" or not type(quantity) is int or quantity < 0:
+            raise QuantityException("Invalid input Error, insert quantity again")
+        if self.quantity - quantity < 0:
+            raise QuantityException("Quantity Error, there are not enough products to buy")
+        if quantity > self.maximum:
+            raise QuantityException(f"Quantity Error, product limited to {self.maximum} per order!")
+        if self.quantity == 0:
+            self.deactivate()
+        return float(self.price * quantity)
