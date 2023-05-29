@@ -5,6 +5,9 @@ class QuantityException(Exception):
     if __name__ == "__main__":
         print("Quantity Error")
 
+class LimitedQuantityException(Exception):
+    if __name__ == "__main__":
+        print("Quantity Error")
 
 class Product:
 
@@ -112,7 +115,7 @@ class LimitedProduct(Product):
                 Returns the total price (float) of the purchase."""
 
         if quantity > self.maximum:
-            raise QuantityException(f"Quantity Error, product limited to {self.maximum} per order!")
+            raise LimitedQuantityException(f"Quantity Error, product limited to {self.maximum} per order!")
 
         return super().buy(quantity)
         # return Product.buy(self, quantity)

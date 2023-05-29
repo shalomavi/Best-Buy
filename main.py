@@ -26,19 +26,21 @@ def apply_choice(user_input, store_name):
             try:
                 product_index = input("Which product # do you want? :")
                 if int(product_index) > len(store_name.get_all_products()):
-                    print("there isn't a product responding to this choice")
+                    print("There isn't a product responding to this choice")
                     continue
                 try:
-                    quantity = int(input("enter amount: "))
+                    quantity = int(input("Enter amount: "))
                     if quantity < 0:
-                        print("amount must be positive number")
+                        print("Amount must be positive number")
                         continue
                     order_price_amount = store_name.order([(store_name.products[int(product_index) - 1], quantity)])
                     print(f"Total purchase amount: {order_price_amount}")
                 except products.QuantityException:
-                    print("there are not enough products to buy, or product is limited")
+                    print("There are not enough products to buy!")
+                except products.LimitedQuantityException:
+                    print(f"Product is limited to {store_name.products[int(product_index) - 1].maximum}")
             except ValueError:
-                print("please enter an integer")
+                print("Please enter an integer")
 
 
 def start(store_name):

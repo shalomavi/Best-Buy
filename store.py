@@ -35,7 +35,8 @@ class Store:
 
         return list_of_active_products
 
-    def order(self, shopping_list: List) -> float:
+    @staticmethod
+    def order(shopping_list: List) -> float:
         """Gets a list of tuples, where each tuple has 2 items:
         Product (Product class), and quantity (int).
         Buys the products and returns the total price of the order."""
