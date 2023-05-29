@@ -1,10 +1,14 @@
+import promotions
+
+
 class QuantityException(Exception):
     if __name__ == "__main__":
         print("Quantity Error")
 
 
 class Product:
-    def __init__(self, name: str, price: float, quantity: int):
+
+    def __init__(self, name: str, price: float, quantity: int, promotion: promotions.Promotion = None):
         """Initiator (constructor) method.
         Creates the instance variables (active is set to True).
         If something is invalid (empty name / negative price or quantity),
@@ -19,6 +23,7 @@ class Product:
         self.price = price
         self.quantity = quantity
         self.active = True
+        self.promotion = promotion
 
     def get_quantity(self) -> float:
         """Getter function for quantity.
@@ -50,7 +55,7 @@ class Product:
 
     def show(self) -> str:
         """Returns a string that represents the product"""
-        return f'{self.name}, Price: {self.price}, Quantity: {self.quantity}'
+        return f'{self.name}, Price: {self.price}, Quantity: {self.quantity}, Promotion: {self.promotion}'
 
     def buy(self, quantity: int) -> float:
         """Buys a given quantity of the product.
@@ -62,7 +67,17 @@ class Product:
         self.set_quantity(self.quantity - quantity)
         if self.quantity == 0:
             self.deactivate()
+
+        if self.promotion is not None:
+            return self.promotion.apply_promotion(self, quantity)
+
         return float(self.price * quantity)
+
+    def get_promotion(self):
+        return self.promotion
+
+    def set_promotion(self, other_promotion):
+        self.promotion = other_promotion
 
 
 class NonStockedProduct(Product):
@@ -71,14 +86,15 @@ class NonStockedProduct(Product):
 
     def show(self) -> str:
         """Returns a string that represents the product"""
-        return f'{self.name}, Price: {self.price}, Quantity: Unlimited'
+        return f'{self.name}, Price: {self.price}, Quantity: Unlimited, Promotion: {self.promotion}'
 
     def buy(self, quantity: int) -> float:
         """Buys a given quantity of the product, quantity is unlimited.
                 Returns the total price (float) of the purchase."""
         if quantity == "" or not type(quantity) is int or quantity < 0:
             raise QuantityException("Invalid input Error, insert quantity again")
-        self.set_quantity(0)
+        if self.promotion is not None:
+            return self.promotion.apply_promotion(self, quantity)
         return float(self.price * quantity)
 
 
@@ -89,17 +105,14 @@ class LimitedProduct(Product):
 
     def show(self) -> str:
         """Returns a string that represents the product"""
-        return f'{self.name}, Price: {self.price}, Limited to {self.maximum} per order!'
+        return f'{self.name}, Price: {self.price}, Limited to {self.maximum} per order!, Promotion: {self.promotion}'
 
     def buy(self, quantity: int) -> float:
         """Buys a given quantity of the product.
                 Returns the total price (float) of the purchase."""
-        if quantity == "" or not type(quantity) is int or quantity < 0:
-            raise QuantityException("Invalid input Error, insert quantity again")
-        if self.quantity - quantity < 0:
-            raise QuantityException("Quantity Error, there are not enough products to buy")
+
         if quantity > self.maximum:
             raise QuantityException(f"Quantity Error, product limited to {self.maximum} per order!")
-        if self.quantity == 0:
-            self.deactivate()
-        return float(self.price * quantity)
+
+        return super().buy(quantity)
+        # return Product.buy(self, quantity)
