@@ -5,9 +5,11 @@ class QuantityException(Exception):
     if __name__ == "__main__":
         print("Quantity Error")
 
+
 class LimitedQuantityException(Exception):
     if __name__ == "__main__":
         print("Quantity Error")
+
 
 class Product:
 
@@ -17,11 +19,14 @@ class Product:
         If something is invalid (empty name / negative price or quantity),
         raises an exception."""
         if name.strip() == "":
-            raise Exception("Empty name value Error, Please enter a name")
+            raise Exception("Empty name value Error,"
+                            " Please enter a name")
         if price < 0:
-            raise Exception("Negative price Error, please set price again")
+            raise Exception("Negative price Error,"
+                            " please set price again")
         if quantity < 0:
-            raise Exception("Negative quantity Error, please set quantity again")
+            raise Exception("Negative quantity Error,"
+                            " please set quantity again")
         self.name = name
         self.price = price
         self.quantity = quantity
@@ -37,7 +42,8 @@ class Product:
         """Setter function for quantity.
          If quantity reaches 0, deactivates the product."""
         if type(quantity) is not int or quantity < 0:
-            raise QuantityException("Invalid input Error, insert quantity again")
+            raise QuantityException("Invalid input Error,"
+                                    " insert quantity again")
         self.quantity = quantity
         if self.quantity <= 0:
             self.active = False
@@ -58,7 +64,8 @@ class Product:
 
     def show(self) -> str:
         """Returns a string that represents the product"""
-        return f'{self.name}, Price: {self.price}, Quantity: {self.quantity}, Promotion: {self.promotion}'
+        return f'{self.name}, Price: {self.price},' \
+               f' Quantity: {self.quantity}, Promotion: {self.promotion}'
 
     def buy(self, quantity: int) -> float:
         """Buys a given quantity of the product.
@@ -66,7 +73,8 @@ class Product:
         if quantity == "" or not type(quantity) is int or quantity < 0:
             raise QuantityException("Invalid input Error, insert quantity again")
         if self.quantity - quantity < 0:
-            raise QuantityException("Quantity Error, there are not enough products to buy")
+            raise QuantityException("Quantity Error,"
+                                    " there are not enough products to buy")
         self.set_quantity(self.quantity - quantity)
         if self.quantity == 0:
             self.deactivate()
@@ -89,7 +97,8 @@ class NonStockedProduct(Product):
 
     def show(self) -> str:
         """Returns a string that represents the product"""
-        return f'{self.name}, Price: {self.price}, Quantity: Unlimited, Promotion: {self.promotion}'
+        return f'{self.name}, Price: {self.price},' \
+               f' Quantity: Unlimited, Promotion: {self.promotion}'
 
     def buy(self, quantity: int) -> float:
         """Buys a given quantity of the product, quantity is unlimited.
@@ -108,14 +117,17 @@ class LimitedProduct(Product):
 
     def show(self) -> str:
         """Returns a string that represents the product"""
-        return f'{self.name}, Price: {self.price}, Limited to {self.maximum} per order!, Promotion: {self.promotion}'
+        return f'{self.name}, Price: {self.price},' \
+               f' Limited to {self.maximum} per order!,' \
+               f' Promotion: {self.promotion}'
 
     def buy(self, quantity: int) -> float:
         """Buys a given quantity of the product.
                 Returns the total price (float) of the purchase."""
 
         if quantity > self.maximum:
-            raise LimitedQuantityException(f"Quantity Error, product limited to {self.maximum} per order!")
+            raise LimitedQuantityException(f"Quantity Error,"
+                                           f" product limited to {self.maximum} per order!")
 
         return super().buy(quantity)
         # return Product.buy(self, quantity)

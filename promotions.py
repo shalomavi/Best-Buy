@@ -25,7 +25,8 @@ class SecondHalfPrice(Promotion):
         Returns the discounted price (float)."""
         full_price_items = quantity // 2 + quantity % 2
         discounted_items = quantity // 2
-        discounted_price = product.price * full_price_items + discounted_items * product.price / 2
+        discounted_price = product.price * full_price_items + \
+            discounted_items * product.price / 2
         return discounted_price
 
 

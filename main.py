@@ -33,12 +33,14 @@ def apply_choice(user_input, store_name):
                     if quantity < 0:
                         print("Amount must be positive number")
                         continue
-                    order_price_amount = store_name.order([(store_name.products[int(product_index) - 1], quantity)])
+                    order_price_amount = store_name.order(
+                        [(store_name.products[int(product_index) - 1], quantity)])
                     print(f"Total purchase amount: {order_price_amount}")
                 except products.QuantityException:
                     print("There are not enough products to buy!")
                 except products.LimitedQuantityException:
-                    print(f"Product is limited to {store_name.products[int(product_index) - 1].maximum}")
+                    print(f"Product is limited to"
+                          f" {store_name.products[int(product_index) - 1].maximum}")
             except ValueError:
                 print("Please enter an integer")
 
